@@ -1,0 +1,24 @@
+# node.js
+#
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# dbase
+#
+*dbase*/*
+dbase-backup/
+!dbase/MSmock.dMl
+!dbase/Cust.Fid
+!dbase/DForm.SDL
+!dbase/MSAcT.SDL
+!dbase/InterAct.Det
+!dbase/MStockU.Fid
+
+# build
+#
+dist/
+public/
+.env
+
+/generated/prisma

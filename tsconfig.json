@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node10",
+    "outDir": "./public",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "paths": {
+      "@services/*": ["./src/routes/*"],
+      "@types/*": ["./src/common/types/*"],
+      "@utils/*": ["./src/common/utils/*"],
+      "@prismaGenerated/*": ["./src/generated/prisma/*"]
+    },
+    "types": ["@types/jest"],
+    "lib": ["es2022"]
+  },
+  "ts-node": {
+    // Do not forget to `npm i -D tsconfig-paths`
+    "require": ["tsconfig-paths/register"]
+  },
+  "include": ["src"]
+}
