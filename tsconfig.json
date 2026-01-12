@@ -8,8 +8,7 @@
     "sourceMap": true,
     "paths": {
       "@services/*": ["./src/routes/*"],
-      "@types/*": ["./src/common/types/*"],
-      "@utils/*": ["./src/common/utils/*"],
+      "@common/*": ["./src/common/*"],
       "@prismaGenerated/*": ["./src/generated/prisma/*"]
     },
     "types": ["@types/jest"],

@@ -1,4 +1,3 @@
-export {Customer} from '../models/customer';
 export {default as BasicDataTypes} from './basic-data-types';
 export {default as DBaseTypeParamArray} from './dbase-type-param-array.type';
 export {default as CustomRequest} from './custom-request.type';
@@ -10,3 +9,5 @@ export {
 } from './byte-manipulation-data';
 export {default as BytesCustomData} from './bytes-custom-data.type';
 export {LogsCustomBody} from './logs-custom-data.type';
+
+export * from './auth.type';

@@ -57,6 +57,8 @@ model PostTranslation {
   postId                                                                    String
   post                                                                      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
+  score                                                                     Float     @default(5) // Popularity score for the translation 0-10 [2 is low cutoff for deletion, anything else is okay]
+
   // Unique constraint: One translation per language per post
   @@unique([postId,                                                         languageCode])
   @@map("post_translations")

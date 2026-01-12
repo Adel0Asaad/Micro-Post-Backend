@@ -1,4 +1,4 @@
-import {Response} from 'express';
+import {CookieOptions, Response} from 'express';
 
 const responseOk = (
   res: Response,
@@ -7,7 +7,10 @@ const responseOk = (
     status?: number;
     description?: string;
   },
-  extraInfo?: {[key: string]: any},
+  extraParams?: {
+    extraInfo?: {[key: string]: any};
+    cookies?: {[key: string]: {value: string; options?: CookieOptions}};
+  },
 ) => {
   const {
     body,
@@ -16,7 +19,8 @@ const responseOk = (
   } = data || {};
   const status = passedStatus || 200;
   const description = passedDescription || 'OK';
-  return finalResponse({res, body, status, description, extraInfo});
+  const {extraInfo, cookies} = extraParams || {};
+  return finalResponse({res, body, status, description, extraInfo, cookies});
 };
 
 const responseCreate = (
@@ -26,7 +30,10 @@ const responseCreate = (
     status?: number;
     description?: string;
   },
-  extraInfo?: {[key: string]: any},
+  extraParams?: {
+    extraInfo?: {[key: string]: any};
+    cookies?: {[key: string]: {value: string; options?: CookieOptions}};
+  },
 ) => {
   const {
     body,
@@ -35,7 +42,8 @@ const responseCreate = (
   } = data || {};
   const status = passedStatus || 201;
   const description = passedDescription || 'File Created';
-  return finalResponse({res, body, status, description, extraInfo});
+  const {extraInfo, cookies} = extraParams || {};
+  return finalResponse({res, body, status, description, extraInfo, cookies});
 };
 
 const responseBadRequest = (
@@ -45,7 +53,10 @@ const responseBadRequest = (
     status?: number;
     description?: string;
   },
-  extraInfo?: {[key: string]: any},
+  extraParams?: {
+    extraInfo?: {[key: string]: any};
+    cookies?: {[key: string]: {value: string; options?: CookieOptions}};
+  },
 ) => {
   const {
     body,
@@ -54,7 +65,8 @@ const responseBadRequest = (
   } = data || {};
   const status = passedStatus || 400;
   const description = passedDescription || 'Bad Request';
-  return finalResponse({res, body, status, description, extraInfo});
+  const {extraInfo, cookies} = extraParams || {};
+  return finalResponse({res, body, status, description, extraInfo, cookies});
 };
 
 const responseUnauthorized = (
@@ -64,7 +76,10 @@ const responseUnauthorized = (
     status?: number;
     description?: string;
   },
-  extraInfo?: {[key: string]: any},
+  extraParams?: {
+    extraInfo?: {[key: string]: any};
+    cookies?: {[key: string]: {value: string; options?: CookieOptions}};
+  },
 ) => {
   const {
     body,
@@ -73,7 +88,8 @@ const responseUnauthorized = (
   } = data || {};
   const status = passedStatus || 401;
   const description = passedDescription || 'Unauthorized';
-  return finalResponse({res, body, status, description, extraInfo});
+  const {extraInfo, cookies} = extraParams || {};
+  return finalResponse({res, body, status, description, extraInfo, cookies});
 };
 
 const responseForbidden = (
@@ -83,7 +99,10 @@ const responseForbidden = (
     status?: number;
     description?: string;
   },
-  extraInfo?: {[key: string]: any},
+  extraParams?: {
+    extraInfo?: {[key: string]: any};
+    cookies?: {[key: string]: {value: string; options?: CookieOptions}};
+  },
 ) => {
   const {
     body,
@@ -92,7 +111,8 @@ const responseForbidden = (
   } = data || {};
   const status = passedStatus || 403;
   const description = passedDescription || 'Forbidden';
-  return finalResponse({res, body, status, description, extraInfo});
+  const {extraInfo, cookies} = extraParams || {};
+  return finalResponse({res, body, status, description, extraInfo, cookies});
 };
 
 const responseConflict = (
@@ -102,7 +122,10 @@ const responseConflict = (
     status?: number;
     description?: string;
   },
-  extraInfo?: {[key: string]: any},
+  extraParams?: {
+    extraInfo?: {[key: string]: any};
+    cookies?: {[key: string]: {value: string; options?: CookieOptions}};
+  },
 ) => {
   const {
     body,
@@ -111,7 +134,8 @@ const responseConflict = (
   } = data || {};
   const status = passedStatus || 409;
   const description = passedDescription || 'Conflict';
-  return finalResponse({res, body, status, description, extraInfo});
+  const {extraInfo, cookies} = extraParams || {};
+  return finalResponse({res, body, status, description, extraInfo, cookies});
 };
 
 const responseInternalError = (
@@ -121,7 +145,10 @@ const responseInternalError = (
     status?: number;
     description?: string;
   },
-  extraInfo?: {[key: string]: any},
+  extraParams?: {
+    extraInfo?: {[key: string]: any};
+    cookies?: {[key: string]: {value: string; options?: CookieOptions}};
+  },
 ) => {
   const {
     body,
@@ -130,7 +157,8 @@ const responseInternalError = (
   } = data || {};
   const status = passedStatus || 500;
   const description = passedDescription || 'General Error';
-  return finalResponse({res, body, status, description, extraInfo});
+  const {extraInfo, cookies} = extraParams || {};
+  return finalResponse({res, body, status, description, extraInfo, cookies});
 };
 
 const finalResponse = ({
@@ -139,12 +167,14 @@ const finalResponse = ({
   status,
   description,
   extraInfo,
+  cookies,
 }: {
   res: Response;
   body: {[key: string]: any};
   status: number;
   description: string;
   extraInfo?: {[key: string]: any};
+  cookies?: {[key: string]: {value: string; options?: CookieOptions}};
 }) => {
   const {headers: garbage1, body: garbage2, ...restInfo} = extraInfo || {};
   const resBody = {
@@ -155,6 +185,11 @@ const finalResponse = ({
     body: {...body},
     ...restInfo,
   };
+  if (cookies) {
+    for (const [key, {value, options}] of Object.entries(cookies)) {
+      res.cookie(key, value, options);
+    }
+  }
   return res.status(status).json(resBody);
 };
 

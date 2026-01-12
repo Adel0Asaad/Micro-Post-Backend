@@ -2,13 +2,13 @@ import {BytesCustomData, CustomRequest} from '@data/types';
 import {Response} from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import {prisma} from '@utils/db';
 import {
   responseBadRequest,
   responseInternalError,
   responseOk,
   responseUnauthorized,
-} from '@utils/network/response.util';
+} from '@common/lib';
+import {prisma} from '@common/lib/db/prisma-config';
 
 const TOKEN_LIFETIME = '16h'; // 16 hours
 

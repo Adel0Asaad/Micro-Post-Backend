@@ -3,10 +3,7 @@ import {
   CreateByteManipulationData,
   CustomRequest,
 } from '@data/types';
-import {
-  responseUnauthorized,
-  responseInternalError,
-} from '@utils/network/response.util';
+import {responseUnauthorized, responseInternalError} from '@common/lib';
 
 import {NextFunction, Response} from 'express';
 import jwt from 'jsonwebtoken';
