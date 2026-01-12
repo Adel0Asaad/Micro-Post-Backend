@@ -1,7 +1,7 @@
 import {JwtPayload} from 'jsonwebtoken';
 import jwt from 'jsonwebtoken';
 
-const TOKEN_LIFETIME = '1h'; // 1 hour
+const TOKEN_LIFETIME = '15m'; // 15 minutes
 
 const signToken = async (payload: JwtPayload): Promise<string> => {
   if (!process.env.JWT_SECRET)

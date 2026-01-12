@@ -1,81 +1,42 @@
-import {BytesCustomData, CustomRequest} from '@data/types';
 import {Response} from 'express';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, {JwtPayload} from 'jsonwebtoken';
 import {
   responseBadRequest,
   responseInternalError,
   responseOk,
   responseUnauthorized,
 } from '@common/lib';
-import {prisma} from '@common/lib/db/prisma-config';
+import {CustomRequest} from '@common/types';
 
-const TOKEN_LIFETIME = '16h'; // 16 hours
+const session = async (req: CustomRequest, res: Response) => {
+  try {
+    const {'auth-token': authToken} = req.cookies;
+    if (!authToken) {
+      return responseUnauthorized(res, {description: 'Not authenticated'});
+    }
 
-const generateToken = async (
-  req: CustomRequest<
-    BytesCustomData,
-    undefined,
-    {'client-id': string; 'client-secret': string}
-  >,
-  res: Response,
-) => {
-  const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-change-in-prod';
-  const {'client-id': client_id, 'client-secret': client_secret} = req.headers;
-  if (!client_id || !client_secret)
-    return responseBadRequest(res, {
-      description: 'Missing Client-ID or Client-Secret',
+    const session = (await jwt.verify(
+      authToken,
+      process.env.JWT_SECRET,
+    )) as JwtPayload;
+
+    if (!session) {
+      return responseUnauthorized(res, {description: 'Not authenticated'});
+    }
+
+    return responseOk(res, {
+      body: {
+        id: session.userId,
+        email: session.email,
+        name: session.name,
+      },
     });
-
-  const client = await prisma.node.findUnique({where: {id: client_id}});
-  if (!client)
-    return responseUnauthorized(res, {description: 'invalid_client'});
-
-  if (!client.businessId)
+  } catch (error) {
+    console.error('Session error:', error);
     return responseInternalError(res, {
-      description:
-        'Corrupted client, please contact your system administrator - MISSING BUSINESS ID',
+      description: 'Internal server error',
     });
-  const business = await prisma.business.findUnique({
-    where: {id: client.businessId},
-  });
-
-  if (!business)
-    return responseInternalError(res, {
-      description:
-        'Corrupted client, please contact your system administrator - MISSING BUSINESS DETAILS',
-    });
-
-  const secretValid = await bcrypt.compare(client_secret, client.secret);
-  if (!secretValid)
-    return responseUnauthorized(res, {
-      description: 'invalid_secret',
-    });
-
-  await prisma.node.update({
-    data: {lastLogin: new Date()},
-    where: {id: client_id, businessId: business.id},
-  });
-
-  const token = jwt.sign(
-    {
-      sub: client_id,
-      biz: business.id,
-      scopes: client.scope,
-    },
-    JWT_SECRET,
-    {
-      expiresIn: TOKEN_LIFETIME,
-    },
-  );
-  return responseOk(res, {
-    description: 'Logged in',
-    body: {
-      access_token: token,
-      token_type: 'bearer',
-      expires_in: 16 * 60 * 60,
-    },
-  });
+  }
 };
 
-export default generateToken;
+export default session;

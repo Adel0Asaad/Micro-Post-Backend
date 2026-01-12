@@ -1,1 +1,1 @@
-export {default as generateToken} from './logout.controller';
+export {default as logout} from './logout.controller';
