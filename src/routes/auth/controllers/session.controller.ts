@@ -1,7 +1,6 @@
 import {Response} from 'express';
 import jwt, {JwtPayload} from 'jsonwebtoken';
 import {
-  responseBadRequest,
   responseInternalError,
   responseOk,
   responseUnauthorized,
@@ -26,9 +25,7 @@ const sessionController = async (req: CustomRequest, res: Response) => {
 
     return responseOk(res, {
       body: {
-        id: session.userId,
-        email: session.email,
-        name: session.name,
+        user: session,
       },
     });
   } catch (error) {

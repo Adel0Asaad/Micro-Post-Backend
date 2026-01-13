@@ -12,7 +12,7 @@ import {authenticateToken} from '@common/middleware';
 dotenv.config();
 
 const app: Express = express();
-const port = Number(process.env.PORT) || 3000;
+const port = Number(process.env.PORT) || 4000;
 
 /**
  * This line was used in a previous project of mine when I used nginx to serve this app
@@ -49,9 +49,9 @@ app.use(bodyParser.json({limit: '1000mb'}));
 /**
  * Routes
  */
-app.use('/', authRouter);
-app.use('/', authenticateToken, postsRouter);
-app.use('/', authenticateToken, usersRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/', authenticateToken, postsRouter);
+app.use('/api/users', authenticateToken, usersRouter);
 
 /**
  * Bind to localhost ONLY

@@ -7,5 +7,5 @@ const usersRouter = Router();
  * GET
  */
 
-usersRouter.get('/users', getUsersController);
+usersRouter.get('/', getUsersController);
 export default usersRouter;
