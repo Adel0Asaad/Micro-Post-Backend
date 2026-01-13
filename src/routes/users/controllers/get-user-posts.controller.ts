@@ -15,7 +15,9 @@ const getUserPostsController = async (
   try {
     const userId = req.params.userId;
 
-    const user = getUserById(userId);
+    const user = await getUserById(userId);
+
+    console.log({user, userId});
     if (!user) {
       return responseBadRequest(res, {description: 'User not found'});
     }
@@ -24,7 +26,7 @@ const getUserPostsController = async (
     return responseOk(res, {
       body: {
         user,
-        posts,
+        posts: posts ?? [],
       },
     });
   } catch (error) {

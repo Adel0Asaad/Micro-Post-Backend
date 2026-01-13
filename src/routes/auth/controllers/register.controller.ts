@@ -40,7 +40,7 @@ const registerController = async (
 
     // Create JWT token
     const token = await signToken({
-      userId: user.id,
+      id: user.id,
       email: user.email,
       name: user.name,
     });
@@ -50,9 +50,11 @@ const registerController = async (
       {
         description: 'Registration successful',
         body: {
-          id: user.id,
-          email: user.email,
-          name: user.name,
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+          },
         },
       },
       {

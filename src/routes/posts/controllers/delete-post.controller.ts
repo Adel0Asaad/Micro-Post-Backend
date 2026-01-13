@@ -12,7 +12,7 @@ const deletePostController = async (
   res: Response,
 ) => {
   try {
-    const {userId} = req.customData;
+    const {id: userId} = req.customData;
 
     const postId = req.params.postId;
     if (!postId || postId.trim() === '' || postId.length === 0) {

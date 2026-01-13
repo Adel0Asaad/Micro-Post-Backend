@@ -15,7 +15,7 @@ const getPostsController = async (
 ) => {
   try {
     const {content} = req.body;
-    const {userId} = req.customData;
+    const {id: userId} = req.customData;
     if (
       !content ||
       content.trim() === '' ||

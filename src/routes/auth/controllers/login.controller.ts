@@ -29,7 +29,7 @@ const loginController = async (
   try {
     // Generate access token (short-lived)
     const accessToken = await signToken({
-      userId: user.id,
+      id: user.id,
       email: user.email,
       name: user.name,
     });
@@ -42,9 +42,11 @@ const loginController = async (
       {
         description: 'Logged in',
         body: {
-          userId: user.id,
-          email: user.email,
-          name: user.name,
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+          },
           // token: accessToken, // for future use if mobile apps are implemented -> check if it's a mobile app by checking the client id and secret provided in auth!
           //   token_type: 'bearer',
           //   expires_in: 15 * 60, // 15 minutes

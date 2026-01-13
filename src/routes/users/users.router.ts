@@ -8,5 +8,5 @@ const usersRouter = Router();
  */
 
 usersRouter.get('/', getUsersController);
-usersRouter.post('/:userId/getUserPostsController', getUserPostsController);
+usersRouter.get('/:userId/posts', getUserPostsController);
 export default usersRouter;

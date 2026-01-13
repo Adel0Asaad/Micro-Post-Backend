@@ -14,7 +14,7 @@ interface RegisterBody {
 }
 
 interface TokenPayload {
-  userId: string;
+  id: string;
   email: string;
   name: string;
 }

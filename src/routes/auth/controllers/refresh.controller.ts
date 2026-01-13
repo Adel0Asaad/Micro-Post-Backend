@@ -64,7 +64,7 @@ const refreshController = async (req: CustomRequest, res: Response) => {
 
     // Generate new access token
     const newAccessToken = await signToken({
-      userId: user.id,
+      id: user.id,
       email: user.email,
       name: user.name,
     });
@@ -74,9 +74,7 @@ const refreshController = async (req: CustomRequest, res: Response) => {
       {
         description: 'Tokens refreshed successfully',
         body: {
-          userId: user.id,
-          email: user.email,
-          name: user.name,
+          user: user,
         },
       },
       {
