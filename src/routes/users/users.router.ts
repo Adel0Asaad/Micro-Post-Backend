@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {getUsersController} from './controllers';
+import {getUserPostsController, getUsersController} from './controllers';
 
 const usersRouter = Router();
 
@@ -8,4 +8,5 @@ const usersRouter = Router();
  */
 
 usersRouter.get('/', getUsersController);
+usersRouter.post('/:userId/getUserPostsController', getUserPostsController);
 export default usersRouter;

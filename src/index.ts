@@ -50,7 +50,7 @@ app.use(bodyParser.json({limit: '1000mb'}));
  * Routes
  */
 app.use('/api/auth', authRouter);
-app.use('/api/', authenticateToken, postsRouter);
+app.use('/api/posts', authenticateToken, postsRouter);
 app.use('/api/users', authenticateToken, usersRouter);
 
 /**

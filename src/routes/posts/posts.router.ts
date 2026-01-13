@@ -4,7 +4,6 @@ import {
   deletePostController,
   getPostController,
   getPostsController,
-  getUserPostsController,
 } from './controllers';
 
 const postsRouter = Router();
@@ -13,23 +12,19 @@ const postsRouter = Router();
  * POST
  */
 
-postsRouter.post('/posts', createPostController);
-postsRouter.post(
-  '/users/:userId/getUserPostsController',
-  getUserPostsController,
-);
+postsRouter.post('/', createPostController);
 
 /**
  * GET
  */
 
-postsRouter.get('/posts', getPostsController);
-postsRouter.get('/posts/:postId', getPostController);
+postsRouter.get('/', getPostsController);
+postsRouter.get('/:postId', getPostController);
 
 /**
  * DELETE
  */
 
-postsRouter.delete('/posts/:postId', deletePostController);
+postsRouter.delete('/:postId', deletePostController);
 
 export default postsRouter;
