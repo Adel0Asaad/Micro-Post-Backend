@@ -8,7 +8,7 @@ import {
 } from '@common/lib';
 import {CustomRequest} from '@common/types';
 
-const session = async (req: CustomRequest, res: Response) => {
+const sessionController = async (req: CustomRequest, res: Response) => {
   try {
     const {'auth-token': authToken} = req.cookies;
     if (!authToken) {
@@ -39,4 +39,4 @@ const session = async (req: CustomRequest, res: Response) => {
   }
 };
 
-export default session;
+export default sessionController;

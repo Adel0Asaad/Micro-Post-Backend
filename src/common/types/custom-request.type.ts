@@ -2,18 +2,7 @@ import {Request} from 'express';
 import {IncomingHttpHeaders} from 'http';
 import * as core from 'express-serve-static-core';
 
-export type AppClient = {
-  id?: string;
-  businessId?: string;
-  scopes?: string[];
-};
-
-type DefaultCustomData = {
-  status?: number;
-  description?: string;
-  body?: {[key: string]: any};
-  client?: AppClient;
-};
+type DefaultCustomData = {}; // unused, can be extended in the future with common properties, was used in previous project and copied here.
 
 interface CustomRequest<
   T extends Record<string, any> | null | undefined = {},

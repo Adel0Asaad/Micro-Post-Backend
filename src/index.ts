@@ -5,8 +5,9 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 
-import {authenticateToken} from '@network/routes/auth/middleware';
-import {authRouter, bytesRouter, dashboardRouter, logsRouter} from './routes';
+// import {authenticateToken} from '@network/routes/auth/middleware';
+import {authRouter, postsRouter, usersRouter} from './routes';
+import {authenticateToken} from '@common/middleware';
 
 dotenv.config();
 
@@ -48,10 +49,9 @@ app.use(bodyParser.json({limit: '1000mb'}));
 /**
  * Routes
  */
-app.use('/bytes', authenticateToken, bytesRouter);
-app.use('/logs', authenticateToken, logsRouter);
-app.use('/dashboard', authenticateToken, dashboardRouter);
-app.use('/auth', authRouter);
+app.use('/', authRouter);
+app.use('/', authenticateToken, postsRouter);
+app.use('/', authenticateToken, usersRouter);
 
 /**
  * Bind to localhost ONLY

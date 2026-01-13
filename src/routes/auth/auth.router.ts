@@ -1,19 +1,25 @@
 import {Router} from 'express';
-
-// import {findDataPath, getBytesFromBase64} from './middleware';
-import {generateToken} from './controllers';
+import {
+  loginController,
+  logoutController,
+  registerController,
+  sessionController,
+} from './controllers';
 
 const authRouter = Router();
-
-/**
- * MIDDLEWARE for /:fileName
- */
 
 /**
  * POST
  */
 
-authRouter.get('/token', generateToken);
-// authRouter.post('/revoke', revokeToken);
+authRouter.post('/login', loginController);
+authRouter.post('/logout', logoutController);
+authRouter.post('/register', registerController);
+
+/**
+ * GET
+ */
+
+authRouter.get('/session', sessionController);
 
 export default authRouter;

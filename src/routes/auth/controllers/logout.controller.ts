@@ -2,7 +2,7 @@ import {Response} from 'express';
 import {responseOk} from '@common/lib';
 import {CustomRequest} from '@common/types';
 
-const logout = async (req: CustomRequest, res: Response) => {
+const logoutController = async (req: CustomRequest, res: Response) => {
   res.clearCookie('auth-token', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
@@ -14,4 +14,4 @@ const logout = async (req: CustomRequest, res: Response) => {
   });
 };
 
-export default logout;
+export default logoutController;

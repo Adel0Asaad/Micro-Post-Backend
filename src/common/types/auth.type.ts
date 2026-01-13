@@ -3,6 +3,10 @@ interface LoginBody {
   password: string;
 }
 
+interface CreatePostBody {
+  content: string;
+}
+
 interface RegisterBody {
   email: string;
   password: string;
@@ -15,4 +19,4 @@ interface TokenPayload {
   name: string;
 }
 
-export type {LoginBody, TokenPayload, RegisterBody};
+export type {LoginBody, CreatePostBody, TokenPayload, RegisterBody};

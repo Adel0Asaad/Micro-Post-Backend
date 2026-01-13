@@ -1,1 +1,2 @@
-export {default as signToken} from './sign-token.lib.js';
+export {default as signToken} from './sign-token.lib';
+export {default as getSession} from './get-session.lib';

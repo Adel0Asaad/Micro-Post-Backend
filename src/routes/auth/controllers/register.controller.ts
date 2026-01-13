@@ -10,7 +10,7 @@ import {
 import {prisma} from '@common/lib/db/prisma-config';
 import {CustomRequest, RegisterBody} from '@common/types';
 
-const register = async (
+const registerController = async (
   req: CustomRequest<undefined, RegisterBody>,
   res: Response,
 ) => {
@@ -76,4 +76,4 @@ const register = async (
   }
 };
 
-export default register;
+export default registerController;
