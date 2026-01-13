@@ -9,7 +9,7 @@ const authenticateToken = (
   res: Response,
   next: NextFunction,
 ) => {
-  const {authToken} = req.cookies;
+  const {'auth-token': authToken} = req.cookies;
 
   const session = getSession(authToken);
 
