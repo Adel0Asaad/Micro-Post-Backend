@@ -79,3 +79,18 @@ model SMSImport {
 
   @@map("sms_imports")
 }
+
+// RefreshToken Model - For secure token refresh flow
+model RefreshToken {
+  id          String   @id @default(cuid())
+  token       String   @unique // The hashed refresh token
+  userId      String
+  expiresAt   DateTime // When the refresh token expires
+  createdAt   DateTime @default(now())
+  revokedAt   DateTime? // If revoked, when it was revoked
+  replacedBy  String?  // If rotated, the new token's ID
+
+  @@index([userId])
+  @@index([token])
+  @@map("refresh_tokens")
+}

@@ -3,6 +3,7 @@ import {CustomRequest, LoginBody} from '@common/types';
 import {
   loginUser,
   signToken,
+  createRefreshToken,
   responseOk,
   responseBadRequest,
   responseUnauthorized,
@@ -26,11 +27,15 @@ const loginController = async (
     });
 
   try {
-    const token = await signToken({
+    // Generate access token (short-lived)
+    const accessToken = await signToken({
       userId: user.id,
       email: user.email,
       name: user.name,
     });
+
+    // Generate refresh token (long-lived)
+    const refreshToken = await createRefreshToken(user.id);
 
     return responseOk(
       res,
@@ -40,7 +45,7 @@ const loginController = async (
           userId: user.id,
           email: user.email,
           name: user.name,
-          // token: token, // for future use if mobile apps are implemented -> check if it's a mobile app by checking the client id and secret provided in auth!
+          // token: accessToken, // for future use if mobile apps are implemented -> check if it's a mobile app by checking the client id and secret provided in auth!
           //   token_type: 'bearer',
           //   expires_in: 15 * 60, // 15 minutes
         },
@@ -48,11 +53,20 @@ const loginController = async (
       {
         cookies: {
           'auth-token': {
-            value: token,
+            value: accessToken,
             options: {
               httpOnly: true,
               secure: process.env.NODE_ENV === 'production',
               sameSite: 'lax',
+            },
+          },
+          'refresh-token': {
+            value: refreshToken,
+            options: {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              sameSite: 'lax',
+              maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
             },
           },
         },

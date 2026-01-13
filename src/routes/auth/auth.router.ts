@@ -4,6 +4,7 @@ import {
   logoutController,
   registerController,
   sessionController,
+  refreshController,
 } from './controllers';
 
 const authRouter = Router();
@@ -15,6 +16,7 @@ const authRouter = Router();
 authRouter.post('/login', loginController);
 authRouter.post('/logout', logoutController);
 authRouter.post('/register', registerController);
+authRouter.post('/refresh', refreshController);
 
 /**
  * GET
