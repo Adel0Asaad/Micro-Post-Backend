@@ -14,20 +14,23 @@ const sessionController = async (req: CustomRequest, res: Response) => {
       return responseUnauthorized(res, {description: 'Not authenticated'});
     }
 
-    const session = (await jwt.verify(
-      authToken,
-      process.env.JWT_SECRET,
-    )) as JwtPayload;
-
-    if (!session) {
+    try {
+      const session = (await jwt.verify(
+        authToken,
+        process.env.JWT_SECRET,
+      )) as JwtPayload;
+      if (!session) {
+        return responseUnauthorized(res, {description: 'Not authenticated'});
+      }
+      return responseOk(res, {
+        body: {
+          user: session,
+        },
+      });
+    } catch (jwtError) {
+      console.error('Session JWT verification error:', jwtError);
       return responseUnauthorized(res, {description: 'Not authenticated'});
     }
-
-    return responseOk(res, {
-      body: {
-        user: session,
-      },
-    });
   } catch (error) {
     console.error('Session error:', error);
     return responseInternalError(res, {
