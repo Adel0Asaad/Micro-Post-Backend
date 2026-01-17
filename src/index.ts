@@ -6,7 +6,13 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 
 // import {authenticateToken} from '@network/routes/auth/middleware';
-import {authRouter, postsRouter, usersRouter} from './routes';
+import {
+  authRouter,
+  postsRouter,
+  usersRouter,
+  followsRouter,
+  likesRouter,
+} from './routes';
 import {authenticateToken} from '@common/middleware';
 
 dotenv.config();
@@ -52,6 +58,8 @@ app.use(bodyParser.json({limit: '1000mb'}));
 app.use('/api/auth', authRouter);
 app.use('/api/posts', authenticateToken, postsRouter);
 app.use('/api/users', authenticateToken, usersRouter);
+app.use('/api/follows', authenticateToken, followsRouter);
+app.use('/api/likes', authenticateToken, likesRouter);
 
 /**
  * Bind to localhost ONLY

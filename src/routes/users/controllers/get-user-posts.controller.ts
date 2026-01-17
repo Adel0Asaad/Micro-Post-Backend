@@ -13,16 +13,17 @@ const getUserPostsController = async (
   res: Response,
 ) => {
   try {
+    const {id: currentUserId} = req.customData;
     const userId = req.params.userId;
 
-    const user = await getUserById(userId);
+    const user = await getUserById(userId, currentUserId);
 
     console.log({user, userId});
     if (!user) {
       return responseBadRequest(res, {description: 'User not found'});
     }
 
-    const posts = await getUserPosts(userId);
+    const posts = await getUserPosts(userId, currentUserId);
     return responseOk(res, {
       body: {
         user,

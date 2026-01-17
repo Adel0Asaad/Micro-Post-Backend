@@ -7,7 +7,8 @@ const getUsersController = async (
   res: Response,
 ) => {
   try {
-    const users = await getAllUsers();
+    const {id: currentUserId} = req.customData;
+    const users = await getAllUsers(currentUserId);
     return responseOk(res, {body: {users}});
   } catch (error) {
     // console.error('Get posts error:', error);

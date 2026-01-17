@@ -25,23 +25,40 @@ model User {
   // Relationship: A user can have many posts (one-to-many)
   posts                                 Post[]
 
+  // Follows: Users this user is following
+  following                             Follow[] @relation("UserFollowing")
+  // Follows: Users who follow this user
+  followers                             Follow[] @relation("UserFollowers")
+
+  // Likes: Posts this user has liked
+  likes                                 Like[]
+
   @@map("users")
 }
 
 // Post Model - Represents a micro-post created by a user
 model Post {
-  id                                                                              String             @id @default(cuid())
+  id                                                                                                                                            String             @id @default(cuid())
   content   String   // Text content of the post (max 280 characters recommended)
-  createdAt                                                                       DateTime           @default(now())
-  updatedAt                                                                       DateTime           @updatedAt
+  createdAt                                                                                                                                     DateTime           @default(now())
+  updatedAt                                                                                                                                     DateTime           @updatedAt
 
   // Relationship: Each post belongs to one user (many-to-one)
-  userId                                                                          String
-  user                                                                            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                                                                                                                                        String
+  user                                                                                                                                          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Translations for the post (one-to-many) - For Question 1.4
-  translations                                                                    PostTranslation[]
+  translations                                                                                                                                  PostTranslation[]
 
+  // Likes: Users who have liked this post
+  likes                                                                                                                                         Like[]
+
+  // Replies: Self-relation for parent-child posts
+  parentId                                                                        String?           // If this is a reply, the parent post's ID
+  parent                                                                                                                                        Post?             @relation("PostReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies                                                                                                                                       Post[]            @relation("PostReplies") // Child posts (replies to this post)
+
+  @@index([parentId])
   @@map("posts")
 }
 
@@ -82,11 +99,11 @@ model SMSImport {
 
 // RefreshToken Model - For secure token refresh flow
 model RefreshToken {
-  id          String   @id @default(cuid())
-  token       String   @unique // The hashed refresh token
-  userId      String
+  id                                                       String    @id @default(cuid())
+  token                                                    String    @unique // The hashed refresh token
+  userId                                                   String
   expiresAt   DateTime // When the refresh token expires
-  createdAt   DateTime @default(now())
+  createdAt                                                DateTime  @default(now())
   revokedAt   DateTime? // If revoked, when it was revoked
   replacedBy  String?  // If rotated, the new token's ID
 
@@ -94,3 +111,45 @@ model RefreshToken {
   @@index([token])
   @@map("refresh_tokens")
 }
+
+// Follow Model - Represents a user following another user (many-to-many self-relation)
+model Follow {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+
+  // The user who is following
+  followerId  String
+  follower    User     @relation("UserFollowing", fields: [followerId], references: [id], onDelete: Cascade)
+
+  // The user being followed
+  followingId String
+  following   User     @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  // Unique constraint: A user can only follow another user once
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+  @@map("follows")
+}
+
+// Like Model - Represents a user liking a post (many-to-many relation)
+model Like {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+
+  // The user who liked the post
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // The post that was liked
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  // Unique constraint: A user can only like a post once
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+  @@map("likes")
+}
+// notifications optional but adds good depth
+// cleanup cron jobs (cleared notifs!)

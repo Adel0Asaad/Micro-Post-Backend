@@ -4,3 +4,6 @@ export {default as getPostById} from './get-post-by-id.lib';
 export {default as getUserFirstPost} from './get-user-first-post.lib';
 export {default as getUserPosts} from './get-user-posts.lib';
 export {default as getAllPosts} from './get-all-posts.lib';
+export {default as createReply} from './create-reply.lib';
+export {default as getPostReplies} from './get-post-replies.lib';
+export {default as getFollowingPosts} from './get-following-posts.lib';

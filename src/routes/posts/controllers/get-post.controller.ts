@@ -14,6 +14,7 @@ const getPostController = async (
   res: Response,
 ) => {
   try {
+    const {id: currentUserId} = req.customData;
     const postId = req.params.postId;
     if (!postId || postId.trim() === '' || postId.length === 0) {
       return responseBadRequest(res, {description: 'Post ID is required'});
@@ -25,7 +26,7 @@ const getPostController = async (
       return responseBadRequest(res, {description: 'Invalid Post ID format'});
     }
 
-    const post = await getPostById(postId);
+    const post = await getPostById(postId, currentUserId);
     if (!post) {
       return responseBadRequest(res, {description: 'Post not found'});
     }

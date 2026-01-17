@@ -1,8 +1,18 @@
 import {prisma} from '../prisma-config';
 
-const getAllPosts = async (currentUserId?: string, includeReplies = false) => {
+const getFollowingPosts = async (currentUserId: string) => {
+  // Get posts from users that the current user follows
   const posts = await prisma.post.findMany({
-    where: includeReplies ? {} : {parentId: null}, // Only top-level posts by default
+    where: {
+      parentId: null, // Only top-level posts
+      user: {
+        followers: {
+          some: {
+            followerId: currentUserId,
+          },
+        },
+      },
+    },
     include: {
       user: {
         select: {
@@ -25,16 +35,14 @@ const getAllPosts = async (currentUserId?: string, includeReplies = false) => {
         },
       },
       // Check if current user liked each post
-      likes: currentUserId
-        ? {
-            where: {
-              userId: currentUserId,
-            },
-            select: {
-              id: true,
-            },
-          }
-        : false,
+      likes: {
+        where: {
+          userId: currentUserId,
+        },
+        select: {
+          id: true,
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc', // latest posts first
@@ -45,10 +53,10 @@ const getAllPosts = async (currentUserId?: string, includeReplies = false) => {
     ...post,
     likesCount: post._count.likes,
     repliesCount: post._count.replies,
-    isLiked: currentUserId ? post.likes.length > 0 : false,
-    likes: undefined, // Remove likes array from response
-    _count: undefined, // Remove _count from response
+    isLiked: post.likes.length > 0,
+    likes: undefined,
+    _count: undefined,
   }));
 };
 
-export default getAllPosts;
+export default getFollowingPosts;

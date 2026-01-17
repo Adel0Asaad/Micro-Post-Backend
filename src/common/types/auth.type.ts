@@ -19,4 +19,8 @@ interface TokenPayload {
   name: string;
 }
 
-export type {LoginBody, CreatePostBody, TokenPayload, RegisterBody};
+interface FollowBody {
+  userId: string;
+}
+
+export type {LoginBody, CreatePostBody, TokenPayload, RegisterBody, FollowBody};
