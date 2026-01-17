@@ -2,6 +2,7 @@ import {Router} from 'express';
 import {
   createPostController,
   deletePostController,
+  updatePostController,
   getPostController,
   getPostsController,
   createReplyController,
@@ -14,6 +15,11 @@ const postsRouter = Router();
  * POST /posts - Create a new post
  */
 postsRouter.post('/', createPostController);
+
+/**
+ * PUT /posts/:postId - Update a post
+ */
+postsRouter.put('/:postId', updatePostController);
 
 /**
  * POST /posts/:postId/replies - Create a reply to a post
