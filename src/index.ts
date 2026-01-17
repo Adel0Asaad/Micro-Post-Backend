@@ -24,7 +24,7 @@ const port = Number(process.env.PORT) || 4000;
  * This line was used in a previous project of mine when I used nginx to serve this app
  * will only be useful in PROD if this goes to PROD.
  */
-// app.set('trust proxy', true);
+app.set('trust proxy', true);
 
 /**
  * Middleware
